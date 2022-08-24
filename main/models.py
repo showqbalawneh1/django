@@ -6,6 +6,6 @@ class tutorial (models.Model):
     tutorialContent = models.TextField("tutorialContent")
     tutorialPublished = models.DateTimeField("date published",default=datetime.now())    
     #we can make various overwrite 
-    def __str__(self):
-        return self.tutorialTitle
+'''    def __str__(self):
+        return self.tutorialTitle'''
     
