@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse 
-from .models import tutorial
+from .models import tutorial ,tutorialCategory ,tutorialSeries
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login ,logout ,authenticate
 from django.contrib import messages
@@ -8,11 +8,32 @@ from .forms import NewUserForm
 #authenticate to the enter password and other password 
 # Create your views here.
 
+def single_slug (request , single_slug ):
+    categories= [c.categorySlug for c in tutorialCategory.objects.all()]
+    if single_slug in categories:
+       # return HttpResponse( f"{single_slug} is a category")
+        catSeries = tutorialSeries.objects.filter(categoryTutorial__categorySlug=single_slug )
+        Url={}
+    #m is a tutorialSeries  object 
+        for m in catSeries.all():
+            url1 = tutorial.objects.filter(seriesTutorial__seriesTutorial=m.seriesTutorial ).earliest("tutorialPublished")
+            Url[m]=url1
+            return render(request, "main/category.html",{"url":Url})#we dont need to give context a name 
+    tutorials= [c.tutorialSlug for c in tutorial.objects.all()]
+    if single_slug in tutorials:
+        return HttpResponse(f("{single_slug} is a tutorial "))
+    
+    return HttpResponse((f" it is trash  "))
 
 def homepage(request):
 	return render(request= request,
 	template_name="main/home.html",
-	context={"tutorials":tutorial.objects.all})
+	context={"categories":tutorialCategory.objects.all})
+
+def category(request):
+	return render(request= request,
+	template_name="main/category.html",
+	context={"tutorials":tutorialCategory.objects.all})
 
 def register(request):
     if request.method == "POST":

@@ -7,17 +7,18 @@
   <br>
 
           <div class="row">
-            {% for  cat in categories %}
+            {% for  tr, parton in url.items %}
             <div class="col s12 col-md-8 l4">
               <div class="card blue-grey darken-1">
                 <div class="card-content white-text">
-                  <span class="card-title">{{cat.categoryTutorial}}</span>
-                  <p style="font-size:70%">{{cat.tutorialPublished}}</p>
-                  <p>{{cat.categorySummary|safe}}</p>
+
+                  <span class="card-title">{{tr.seriesTutorial}}</span>
+                  <p style="font-size:70%">{{tr.seriesSummary}}</p>
+                  <p>{{tr.seriesSummary|safe}}</p>
                 
                 </div>
                 <div class="card-action">
-                  <a href="{{cat.categorySlug}}">visit</a>
+                  <a href="../{{parton}}">visit</a>
                 </div>
               </div>
             </div>
@@ -34,11 +35,11 @@
               </tr>
             </thead>
             <tbody>
-                {% for  tr in categories %}
+                {% for  tr in tutorials %}
               <tr>
                 <th scope="row">id</th>
-                <td>{{tr.categoryTutorial}}</td>
-                <td>{{tr.categorySummary|safe}}</td>
+                <td>{{tr.tutorialTitle}}</td>
+                <td>{{tr.tutorialContent|safe}}</td>
                 <td>{{tr.tutorialPublished}}</td>
               </tr>
              
