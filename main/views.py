@@ -16,12 +16,19 @@ def single_slug (request , single_slug ):
         Url={}
     #m is a tutorialSeries  object 
         for m in catSeries.all():
-            url1 = tutorial.objects.filter(seriesTutorial__seriesTutorial=m.seriesTutorial ).earliest("tutorialPublished")
+            url1 = tutorial.objects.filter(seriesTutorial__seriesTutorial=m.seriesTutorial).earliest("tutorialPublished")
             Url[m]=url1
             return render(request, "main/category.html",{"url":Url})#we dont need to give context a name 
+        
+        
     tutorials= [c.tutorialSlug for c in tutorial.objects.all()]
     if single_slug in tutorials:
-        return HttpResponse(f("{single_slug} is a tutorial "))
+        thisTut = tutorial.objects.get(tutorialSlug=single_slug)
+        serTut=tutorial.objects.filter(seriesTutorial__seriesTutorial=thisTut.seriesTutorial).order_by("tutorialPublished")
+        
+        tutIdx=list(serTut).index(thisTut)
+        #return HttpResponse(f("{single_slug} is a tutorial "))
+        return render(request,"main/tutorial.html",{"tutorial":thisTut,"sidebar":serTut,"tutIdx":tutIdx})
     
     return HttpResponse((f" it is trash  "))
 
